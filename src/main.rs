@@ -54,7 +54,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let interval: u64 = args.interval;
     let timeout: u64 = args.timeout;
     let output_file: String = args.output.unwrap_or(format!(
-        "observatory-log-{}",
+        "observatory-{}.log",
         Local::now().format("%Y-%m-%d_%H-%M-%S")
     ));
 
