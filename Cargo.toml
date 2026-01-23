@@ -1,0 +1,12 @@
+[package]
+name = "mc-server-logger"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+boxen = "0.1.3"
+chrono = "0.4.43"
+clap = { version = "4.5.54", features = ["derive"] }
+inline_colorization = "0.1.6"
+rust-mc-status = "2.0.0"
+tokio = "1.49.0"

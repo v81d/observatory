@@ -1,0 +1,10 @@
+debug/
+target/
+
+# rustfmt backup files
+**/*.rs.bk
+
+# Mutation testing data
+**/mutants.out*/
+
+Cargo.lock
