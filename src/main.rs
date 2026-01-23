@@ -6,7 +6,7 @@ use rust_mc_status::{McClient, ServerData, ServerEdition, ServerStatus};
 use std::thread::sleep;
 use std::time::Duration;
 
-/// A simple but fast Minecraft server status logger
+/// A simple and fast Minecraft server status logger
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
 struct Args {
