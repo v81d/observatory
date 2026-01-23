@@ -5,7 +5,7 @@
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/v81d/observatory?style=for-the-badge)
 ![GitHub License](https://img.shields.io/github/license/v81d/observatory?style=for-the-badge)
 
-Observatory is a fast CLI Minecraft server status logger, compatible with both Java and Bedrock servers.
+Observatory is a fast CLI Minecraft server status logger, compatible with both Java and Bedrock servers. It supports continuous logging and saving the output to a log file.
 
 ## Quick Start
 
@@ -48,14 +48,16 @@ This will display a help page describing Observatory and its command usage.
 
 Observatory is a command-line tool, meaning it is designed to be run from your terminal. Below is a table showing the possible options you can pass.
 
-| Option | Usage |
-| --- | --- |
-| -i, --ip <IP> | IP of the server |
-| -p, --port <PORT> | Port of the server |
-| -e, --edition <EDITION> | Minecraft game edition [default: java] [possible values: java, bedrock] |
-| -I, --interval <INTERVAL> | Interval in seconds over which the server is pinged [default: 20] |
-| -h, --help | Print help |
-| -V, --version | Print version |
+| Option                    | Usage                                                                   |
+| ------------------------- | ----------------------------------------------------------------------- |
+| -i, --ip <IP>             | IP of the server                                                        |
+| -p, --port <PORT>         | Port of the server                                                      |
+| -e, --edition <EDITION>   | Minecraft game edition [default: java] [possible values: java, bedrock] |
+| -I, --interval <INTERVAL> | Interval in seconds over which the server is pinged [default: 20]       |
+| -o, --output <OUTPUT>     | Location to save log output                                             |
+| --no-output               | Do not save log to output file                                          |
+| -h, --help                | Print help                                                              |
+| -V, --version             | Print version                                                           |
 
 ## Contributing
 
