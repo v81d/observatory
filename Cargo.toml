@@ -9,4 +9,5 @@ chrono = "0.4.43"
 clap = { version = "4.5.54", features = ["derive"] }
 inline_colorization = "0.1.6"
 rust-mc-status = "2.0.0"
+strip-ansi-escapes = "0.2.1"
 tokio = "1.49.0"

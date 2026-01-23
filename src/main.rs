@@ -3,6 +3,8 @@ use chrono::{DateTime, Local};
 use clap::Parser;
 use inline_colorization::*;
 use rust_mc_status::{McClient, ServerData, ServerEdition, ServerStatus};
+use std::fs::OpenOptions;
+use std::io::Write;
 use std::thread::sleep;
 use std::time::Duration;
 
@@ -29,6 +31,14 @@ struct Args {
     /// Duration in seconds to wait before closing the pinger client
     #[arg(short, long, default_value_t = 10)]
     timeout: u64,
+
+    /// Location to save log output
+    #[arg(short, long)]
+    output: Option<String>,
+
+    /// Do not save log to output file
+    #[arg(long, default_value_t = false)]
+    no_output: bool,
 }
 
 #[tokio::main]
@@ -43,6 +53,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
     let interval: u64 = args.interval;
     let timeout: u64 = args.timeout;
+    let output_file: String = args.output.unwrap_or(format!(
+        "observatory-log-{}",
+        Local::now().format("%Y-%m-%d_%H-%M-%S")
+    ));
 
     let client = McClient::new()
         .with_timeout(Duration::from_secs(timeout))
@@ -196,6 +210,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .unwrap();
         println!("{output}");
+
+        // Write output to file
+        if !args.no_output {
+            let mut file = OpenOptions::new()
+                .create(true)
+                .append(true)
+                .open(&output_file)?;
+
+            writeln!(file, "{}", strip_ansi_escapes::strip_str(output))?;
+        }
 
         i += 1;
 
