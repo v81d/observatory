@@ -203,6 +203,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             lines.join("\n"),
             Some(BoxenOptions {
                 border_style: BorderStyle::Round,
+                border_color: Some(::boxen::Color::Named("white".to_string())),
                 padding: Spacing::from(1),
                 title: Some(format!("Iteration {i}")),
                 ..Default::default()
