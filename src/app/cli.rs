@@ -46,7 +46,7 @@ pub struct Args {
     pub timeout: u64,
 
     /// Output type
-    #[arg(long, value_parser = ["all", "condensed", "players"], default_value_t = String::from("all"))]
+    #[arg(long, value_parser = ["all", "players"], default_value_t = String::from("all"))]
     pub output_type: String,
 
     /// Location to save log output
