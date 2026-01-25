@@ -2,7 +2,7 @@ use ::boxen::{BorderStyle, BoxenOptions, Spacing, boxen};
 use chrono::{DateTime, Local};
 use clap::Parser;
 use inline_colorization::*;
-use rust_mc_status::{McClient, ServerData, ServerEdition, ServerStatus};
+use rust_mc_status::{JavaPlayer, McClient, ServerData, ServerEdition, ServerStatus};
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::thread::sleep;
@@ -39,6 +39,10 @@ struct Args {
     /// Do not save log to output file
     #[arg(long, default_value_t = false)]
     no_output: bool,
+
+    /// Output type
+    #[arg(long, value_parser = ["all", "condensed", "players"], default_value_t = String::from("all"))]
+    output_type: String,
 }
 
 #[tokio::main]
@@ -54,19 +58,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let interval: u64 = args.interval;
     let timeout: u64 = args.timeout;
     let output_file: String = args.output.unwrap_or(format!(
-        "observatory-{}.log",
+        "{address}-{}.log",
         Local::now().format("%Y-%m-%d_%H-%M-%S")
     ));
+    let output_type: String = args.output_type;
 
     let client = McClient::new()
         .with_timeout(Duration::from_secs(timeout))
         .with_max_parallel(10);
+
+    // Previous status
+    let mut last_players_online: i64 = 0;
+    let mut last_players_max: i64 = 0;
 
     let mut i = 1;
 
     loop {
         let status: ServerStatus = client.ping(&address, edition).await?;
         let timestamp: DateTime<Local> = Local::now();
+
+        let mut players_sample: Vec<JavaPlayer> = Vec::new();
+        let mut players_online: i64 = 0;
+        let mut players_max: i64 = 0;
 
         let mut lines: Vec<String> = Vec::new();
         lines.push(format!(
@@ -88,11 +101,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 data.players.online, data.players.max
             ));
 
+            players_online = data.players.online;
+            players_max = data.players.max;
+
             // List sample of players (if supplied)
-            if let Some(players_sample) = &data.players.sample {
-                for player in players_sample {
+            if let Some(sample) = &data.players.sample {
+                for player in sample {
                     lines.push(format!("  {color_green}-{color_blue} {} ({color_magenta}{}{color_blue}){color_reset}", player.name, player.id));
                 }
+
+                players_sample = sample.clone();
             }
 
             // Show current map name (if supplied)
@@ -129,10 +147,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         plugin.version.clone().unwrap_or("unknown".to_string())
                     ));
                 }
-            }
-
-            // Show mods (if supplied)
-            if let Some(mods) = &data.mods {
+            } else if let Some(mods) = &data.mods {
                 lines.push(format!("\n{color_green}Mods:{color_blue} {}", mods.len()));
                 for m in mods {
                     lines.push(format!(
@@ -167,6 +182,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "\n{color_green}Players:{color_blue} {}/{}{color_reset}",
                 data.online_players, data.max_players
             ));
+
+            players_online = data.online_players.parse().unwrap_or_default();
+            players_max = data.max_players.parse().unwrap_or_default();
+
             lines.push(format!(
                 "\n{color_green}Server UID:{color_blue} {}{color_reset}",
                 data.server_uid
@@ -199,7 +218,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
 
-        let output = boxen(
+        let output: String = boxen(
             lines.join("\n"),
             Some(BoxenOptions {
                 border_style: BorderStyle::Round,
@@ -219,7 +238,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .append(true)
                 .open(&output_file)?;
 
-            writeln!(file, "{}", strip_ansi_escapes::strip_str(output))?;
+            match output_type.as_str() {
+                "players" => {
+                    if last_players_online != players_online || last_players_max != players_max {
+                        let mut content: Vec<String> = Vec::new();
+                        content.push(format!(
+                            "[{timestamp}] There are now {players_online}/{players_max} players on the server {address}. (Iteration {i})"
+                        ));
+
+                        for player in players_sample {
+                            content.push(format!("  - {} ({})", player.name, player.id));
+                        }
+
+                        writeln!(file, "{}\n", content.join("\n"))?;
+
+                        last_players_online = players_online;
+                        last_players_max = players_max;
+                    }
+                }
+                _ => writeln!(file, "{}", strip_ansi_escapes::strip_str(output))?,
+            }
         }
 
         i += 1;
