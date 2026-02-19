@@ -1,9 +1,9 @@
 # Observatory
 
-![GitHub Commit Activity](https://img.shields.io/github/commit-activity/w/v81d/observatory?style=for-the-badge)
-![GitHub Top Language](https://img.shields.io/github/languages/top/v81d/observatory?style=for-the-badge)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/v81d/observatory?style=for-the-badge)
-![GitHub License](https://img.shields.io/github/license/v81d/observatory?style=for-the-badge)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/v81d/observatory?style=for-the-badge)
+![GitHub top language](https://img.shields.io/github/languages/top/v81d/observatory?style=for-the-badge)
+![GitHub issues or pull requests](https://img.shields.io/github/issues/v81d/observatory?style=for-the-badge)
+![GitHub license](https://img.shields.io/github/license/v81d/observatory?style=for-the-badge)
 
 Observatory is a fast CLI Minecraft server status logger, compatible with both Java and Bedrock servers. It supports continuous logging and saving the output to a log file.
 
