@@ -54,24 +54,6 @@ Observatory is a command-line tool, meaning it is designed to be run from your t
 | -h, --help                | Print help                                                              |
 | -V, --version             | Print version                                                           |
 
-## Contributing
-
-### Reporting Issues
-
-To report an issue or bug, visit Observatory's [issue tracker](https://github.com/v81d/observatory/issues) on GitHub.
-
-### Pull Requests
-
-To push your features or fixes into this official repository:
-
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/my-feature`) or a fix branch (`git checkout -b fix/my-fix`).
-3. Commit your changes (`git commit -m "feat: add new feature"`). **Please follow the [Conventional Commits](https://www.conventionalcommits.org) guideline when doing so!**
-4. Push the branch (`git push origin feature/my-feature`).
-5. Open a pull request with `contrib` as the base branch. Make sure to create a detailed title and description of your change.
-
-Please follow the [GitHub flow](https://guides.github.com/introduction/flow) and Observatory's [Code of Conduct](CODE_OF_CONDUCT.md) when submitting a pull request.
-
 ## License
 
 Observatory is free software distributed under the **GNU General Public License, version 3.0 or later (GPL-3.0+).**
